@@ -1,4 +1,4 @@
-const url = '../docs/sample.pdf';
+let url = '../docs/sample.pdf';
 
 let pdfDoc = null,
   pageNum = 1, 
@@ -7,7 +7,8 @@ let pdfDoc = null,
 
 const scale = 1,
   canvas = document.querySelector('#pdf-render'),
-  ctx = canvas.getContext('2d');
+  ctx = canvas.getContext('2d'),
+  base64_marker = ';base64,';
 
 // Render the page.
 const renderPage = num => {
@@ -65,6 +66,24 @@ const showNextPage = () => {
   pageNum++;
   queueRenderPage(pageNum);
 };
+
+const convertDataURIToBinary = dataURI => {
+  var base64Index = dataURI.indexOf(base64_marker) + base64_marker.length;
+  var base64 = dataURI.substring(base64Index);
+  var raw = window.atob(base64);
+  var rawLength = raw.length;
+  var array = new Uint8Array(new ArrayBuffer(rawLength));
+
+  for(var i = 0; i < rawLength; i++) {
+    array[i] = raw.charCodeAt(i);
+  }
+  return array;
+}
+
+// If document is base64 data, conver to binary first.
+if (url.indexOf(base64_marker) > -1) {
+  url = convertDataURIToBinary(url);
+}
 
 // Get document.
 pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
