@@ -38,3 +38,9 @@
 .page-info {
   margin-left: 1rem;
 }
+
+.error {
+  background: orangered;
+  color: #ffffff;
+  padding: 1rem;
+}
