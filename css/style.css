@@ -5,8 +5,8 @@
 }
 
 .top-bar {
-  background: #ffffff;
-  color: #115737;
+  background: #263238;
+  color: #f57c00;
   padding: 1rem;
   text-transform: uppercase;
   font-weight: bold;
@@ -18,9 +18,9 @@
 }
 
 .btn {
-  background: #115737;
+  background: #f57c00;
   border-radius: 2px;
-  color: #ffffff;
+  color: #263238;
   font-weight: bold;
   border: none;
   outline: none;
@@ -43,4 +43,19 @@
   background: orangered;
   color: #ffffff;
   padding: 1rem;
+}
+
+.right {
+  float: right;
+}
+
+input {
+  width: 300px;
+  border: none;
+  border-bottom: 1px solid #f57c00;
+  outline: none;
+  background: none;
+  padding: 5px;
+  margin-right: 1rem;
+  color: #f57c00;
 }
