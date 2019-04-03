@@ -4,6 +4,10 @@
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+#pdfControl {
+  display: inline;
+}
+
 .top-bar {
   background: #263238;
   color: #f57c00;
@@ -42,7 +46,8 @@
 .error {
   background: orangered;
   color: #ffffff;
-  padding: 1rem;
+  height: 41.4px;
+  line-height: 41.4px;
 }
 
 .right {
@@ -58,4 +63,18 @@ input {
   padding: 5px;
   margin-right: 1rem;
   color: #f57c00;
+}
+
+.error input {
+  border-bottom-color: #ffffff;
+  color: #ffffff;
+}
+
+.error button.btn {
+  background-color: #ffffff;
+  color: #263238;
+}
+
+.errorMsg {
+  display: none;
 }

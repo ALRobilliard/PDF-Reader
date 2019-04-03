@@ -1,9 +1,8 @@
-let url = '../docs/sample.pdf';
-
 let pdfDoc = null,
   pageNum = 1, 
   pageIsRendering = false,
-  pageNumIsPending = null;
+  pageNumIsPending = null,
+  initUrl = '../docs/sample.pdf';
 
 const scale = 1,
   canvas = document.querySelector('#pdf-render'),
@@ -80,28 +79,59 @@ const convertDataURIToBinary = dataURI => {
   return array;
 }
 
-// If document is base64 data, conver to binary first.
-if (url.indexOf(base64_marker) > -1) {
-  url = convertDataURIToBinary(url);
+const displayError = errorMsg => {
+  const topBar = document.querySelector('.top-bar'),
+    pdfControl = document.querySelector('#pdfControl'),
+    errorDiv = document.getElementById('errorMsg'),
+    errorSpan = document.getElementById('errorSpan');
+  
+  topBar.classList.add('error');
+  pdfControl.style.display = 'none';
+  errorSpan.textContent = errorMsg;
+  errorDiv.style.display = 'inline';
 }
 
-// Get document.
-pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
-  pdfDoc = pdfDoc_;
+const hideError = () => {
+  const topBar = document.querySelector('.top-bar'),
+    pdfControl = document.querySelector('#pdfControl'),
+    errorDiv = document.getElementById('errorMsg');
+  
+  topBar.classList.remove('error');
+  pdfControl.style.display = 'inline';
+  errorDiv.style.display = 'none';
+}
 
-  document.querySelector('#page-count').textContent = pdfDoc.numPages;
+const renderPdf = () => {
+  const url = document.getElementById('urlInput').value;
+  if (url == null || url === '') {
+    return;
+  }
 
-  renderPage(pageNum);
-}).catch(error => {
-  // Display error.
-  const div = document.createElement('div');
-  div.className = 'error';
-  div.appendChild(document.createTextNode(error.message));
-  document.querySelector('body').insertBefore(div, canvas);
-  // Remove top bar.
-  document.querySelector('.top-bar').style.display = 'none';
-})
+  // If document is base64 data, conver to binary first.
+  if (url.indexOf(base64_marker) > -1) {
+    url = convertDataURIToBinary(url);
+  }
+
+  // Get document.
+  pdfjsLib.getDocument(url).promise.then(pdfDoc_ => {
+    pdfDoc = pdfDoc_;
+
+    document.querySelector('#page-count').textContent = pdfDoc.numPages;
+
+    // Move back to beginning of document.
+    pageNum = 1;
+    hideError();
+    renderPage(pageNum);
+  }).catch(error => {
+    displayError(error.message);
+  })
+}
 
 // Button events.
 document.querySelector('#prev-page').addEventListener('click', showPrevPage);
 document.querySelector('#next-page').addEventListener('click', showNextPage);
+document.querySelector('#refresh').addEventListener('click', renderPdf);
+
+// Start reader with initial value.
+document.getElementById('urlInput').value = initUrl;
+renderPdf();
